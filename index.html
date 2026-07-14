@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tu estereograma — mientras esperás tu plato</title>
+<meta name="description" content="Creá tu propia imagen 3D oculta mientras esperás la comida.">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<header>
+    <div class="marca">✨ Tu estereograma</div>
+    <div class="restaurante" id="nombre-restaurante"></div>
+</header>
+
+<!-- ============ PANTALLA 1: personalización ============ -->
+<main id="pantalla-crear">
+    <p class="intro">Mientras esperás tu plato, creá una imagen mágica:
+        una figura 3D <strong>escondida</strong> que solo vas a poder ver
+        si sabés cómo mirarla.</p>
+
+    <section>
+        <h2><span class="paso">1</span> ¿Qué figura escondemos?</h2>
+        <div class="grilla-temas" id="grilla-ocultos"></div>
+    </section>
+
+    <section>
+        <h2><span class="paso">2</span> ¿De qué se ve lleno el dibujo?</h2>
+        <div class="grilla-temas" id="grilla-visibles"></div>
+    </section>
+
+    <section>
+        <h2><span class="paso">3</span> Elegí 3 colores
+            <span class="contador" id="contador-colores">0 de 3</span></h2>
+        <div class="grilla-paleta" id="grilla-colores"></div>
+    </section>
+
+    <button id="boton-crear" class="principal" disabled>✨ Crear mi estereograma</button>
+</main>
+
+<!-- ============ PANTALLA 2: resultado ============ -->
+<main id="pantalla-resultado" class="oculta">
+    <h2 id="titulo-resultado" class="titulo-resultado"></h2>
+    <canvas id="lienzo"></canvas>
+
+    <section class="explicacion">
+        <h3>¿Cómo la veo? 👀</h3>
+        <ol id="lista-explicacion"></ol>
+        <p class="nota" id="nota-honesta"></p>
+    </section>
+
+    <div class="acciones">
+        <button id="boton-guardar" class="principal">💾 Guardar mi imagen</button>
+        <button id="boton-cruzado" class="secundario">Versión para ojos cruzados</button>
+        <button id="boton-volver" class="secundario">← Crear otra distinta</button>
+    </div>
+</main>
+
+<footer>
+    <button id="boton-menu" class="enlace">🍽️ Ver el menú</button>
+    <p id="aviso-menu" class="oculta aviso">El menú digital llega pronto a esta misma página 😉</p>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/temas.js"></script>
+<script src="js/stereogram.js"></script>
+<script src="js/patrones.js"></script>
+<script src="js/ocultos.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
