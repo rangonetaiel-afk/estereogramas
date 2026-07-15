@@ -12,9 +12,14 @@ var CONFIG = {
     // la densidad de pantalla del celular). Valores según investigación:
     // período de 100-140 px para visión a 30-50 cm.
     T0_CSS: 110,      // período base del patrón
-    PASO_CSS: 3,      // desplazamiento por nivel de profundidad
-    NIVELES: 8,       // niveles de profundidad
+    PASO_CSS: 2,      // desplazamiento por nivel de profundidad
+    NIVELES: 12,      // niveles de profundidad (relieve más gradual)
     FONDO: 0,         // nivel del fondo
+
+    // Sobremuestreo: genera internamente a esta escala y reduce con
+    // antialiasing. Técnica documentada para estereogramas: multiplica los
+    // planos de profundidad efectivos y suaviza artefactos. 1 = desactivado.
+    SOBREMUESTREO: 2,
 
     // Proporción alto/ancho del estereograma generado
     PROPORCION_ALTO: 1.25,

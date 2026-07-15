@@ -87,23 +87,28 @@
         boton.textContent = "Creando tu estereograma...";
 
         var dpr = Math.min(window.devicePixelRatio || 1, 3);
+        var S = Math.max(1, CONFIG.SOBREMUESTREO || 1);
         var contAncho = Math.min($("pantalla-crear").clientWidth || 360, 480);
         var W = Math.round(contAncho * dpr);
         var H = Math.round(W * CONFIG.PROPORCION_ALTO);
-        var t0 = Math.round(CONFIG.T0_CSS * dpr);
+        // Dimensiones internas sobremuestreadas: se genera a S veces la
+        // resolución y se reduce al final con antialiasing
+        var Wi = W * S;
+        var Hi = H * S;
+        var t0 = Math.round(CONFIG.T0_CSS * dpr) * S;
         if (t0 % 2 !== 0) t0 -= 1;
-        var paso = Math.max(2, Math.round(CONFIG.PASO_CSS * dpr));
+        var paso = Math.max(2, Math.round(CONFIG.PASO_CSS * dpr)) * S;
         if (!estado.cruzado) paso = -paso; // paralelo: la figura "sale" hacia adelante
 
         var temaOculto = temaPorId(estado.oculto);
         var temaVisible = temaPorId(estado.visible);
 
-        cargarOculto("assets/ocultos/" + temaOculto.id + ".png", W, H,
+        cargarOculto("assets/ocultos/" + temaOculto.id + ".png", Wi, Hi,
                      CONFIG.ESCALA_FIGURA, CONFIG.SUAVIZADO)
             .then(function (gris) {
-                var patron = generarPatron(temaVisible, estado.colores, t0, H);
+                var patron = generarPatron(temaVisible, estado.colores, t0, Hi);
                 var resultado = Estereograma.generarEstereograma({
-                    ancho: W, alto: H, ocultoGris: gris, visible: patron,
+                    ancho: Wi, alto: Hi, ocultoGris: gris, visible: patron,
                     t0: t0, paso: paso, fondo: CONFIG.FONDO, niveles: CONFIG.NIVELES
                 });
 
@@ -111,7 +116,18 @@
                 canvas.width = W;
                 canvas.height = H;
                 canvas.style.width = contAncho + "px";
-                canvas.getContext("2d").putImageData(new ImageData(resultado.data, W, H), 0, 0);
+                var ctx = canvas.getContext("2d");
+                if (S > 1) {
+                    var interno = document.createElement("canvas");
+                    interno.width = Wi;
+                    interno.height = Hi;
+                    interno.getContext("2d").putImageData(new ImageData(resultado.data, Wi, Hi), 0, 0);
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = "high";
+                    ctx.drawImage(interno, 0, 0, W, H);
+                } else {
+                    ctx.putImageData(new ImageData(resultado.data, W, H), 0, 0);
+                }
 
                 estado.ultimaGeneracion = { temaOculto: temaOculto, temaVisible: temaVisible };
                 $("titulo-resultado").textContent =
