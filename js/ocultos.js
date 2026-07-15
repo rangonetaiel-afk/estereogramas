@@ -5,7 +5,7 @@
  * sobre negro en assets/ocultos/, dibujada centrada sobre un lienzo del
  * tamaño del estereograma y convertida a luminancia (Uint8Array).
  */
-function cargarOculto(rutaPng, ancho, alto, escalaFigura) {
+function cargarOculto(rutaPng, ancho, alto, escalaFigura, suavizado) {
     return new Promise(function (resolver, rechazar) {
         var img = new Image();
         img.onload = function () {
@@ -20,7 +20,25 @@ function cargarOculto(rutaPng, ancho, alto, escalaFigura) {
             var lado = Math.min(ancho, alto) * (escalaFigura || 0.72);
             var fx = (ancho - lado) / 2;
             var fy = (alto - lado) / 2;
-            ctx.drawImage(img, fx, fy, lado, lado);
+
+            // Bisel: reducir y re-agrandar genera un gradiente en los bordes
+            // que se convierte en niveles intermedios de profundidad (borde
+            // redondeado). Funciona en cualquier navegador, sin ctx.filter.
+            var factor = suavizado && suavizado > 1 ? suavizado : 1;
+            if (factor > 1) {
+                var mini = document.createElement("canvas");
+                mini.width = Math.max(2, Math.round(lado / factor));
+                mini.height = Math.max(2, Math.round(lado / factor));
+                var mctx = mini.getContext("2d");
+                mctx.imageSmoothingEnabled = true;
+                mctx.imageSmoothingQuality = "high";
+                mctx.drawImage(img, 0, 0, mini.width, mini.height);
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = "high";
+                ctx.drawImage(mini, fx, fy, lado, lado);
+            } else {
+                ctx.drawImage(img, fx, fy, lado, lado);
+            }
 
             var datos = ctx.getImageData(0, 0, ancho, alto).data;
             var gris = new Uint8Array(ancho * alto);

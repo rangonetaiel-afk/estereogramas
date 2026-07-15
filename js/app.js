@@ -98,7 +98,8 @@
         var temaOculto = temaPorId(estado.oculto);
         var temaVisible = temaPorId(estado.visible);
 
-        cargarOculto("assets/ocultos/" + temaOculto.id + ".png", W, H, CONFIG.ESCALA_FIGURA)
+        cargarOculto("assets/ocultos/" + temaOculto.id + ".png", W, H,
+                     CONFIG.ESCALA_FIGURA, CONFIG.SUAVIZADO)
             .then(function (gris) {
                 var patron = generarPatron(temaVisible, estado.colores, t0, H);
                 var resultado = Estereograma.generarEstereograma({

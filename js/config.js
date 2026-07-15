@@ -20,7 +20,13 @@ var CONFIG = {
     PROPORCION_ALTO: 1.25,
 
     // Tamaño de la figura oculta relativo al ancho del lienzo
-    ESCALA_FIGURA: 0.72
+    ESCALA_FIGURA: 0.90,
+
+    // Suavizado del borde de la figura (bisel): la imagen oculta se dibuja
+    // reducida por este factor y se re-agranda, generando un gradiente en
+    // los bordes que el motor convierte en niveles intermedios de
+    // profundidad (borde redondeado, más fácil de "ver"). 1 = desactivado.
+    SUAVIZADO: 4
 };
 
 /*
